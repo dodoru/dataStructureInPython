@@ -1,5 +1,4 @@
 # -*- coding:utf-8 -*-
-# 20150317 exercise by dodoru#
 class linkNode(object):
     def __init__(self,element=None,next=None):
         self.element=element
@@ -25,7 +24,7 @@ class linklist():
         tempNode=linkNode(element,None)
         if self.isEmpty():
             print("Empty link no one after")
-        else:
+        else:#####################这段有问题
             pointNode=self.head
             while pointNode.element is not nodeValue:
                 pointNode=pointNode.next
@@ -39,7 +38,7 @@ class linklist():
         elif self.head.element is nodeValue:
             tempNode.next=self.head
             self.head=tempNode
-        else:
+        else:#####################这段有问题
             pointNode=self.head
             while pointNode.next is not nodeValue:
                 pointNode=pointNode.next
@@ -75,44 +74,31 @@ class linklist():
 
 
 def test_isEmpty():
-   link=linklist()
-   node=linkNode(1,None)
-   link.head=node
-   print(link.isEmpty())
-   link.insertBefore(2,1)
-   link.show()
+    link=linklist()
+    print(link.isEmpty())
+    node=linkNode(1,None)
+    link.head=node
+    print(link.isEmpty())
+    link.insertBefore(2,1)
+    link.show()
+    print(link.isEmpty())
+    #link.insertBefore(3,1)
+    link.insertBefore(5,2)
+    link.show()
+    print(link.isEmpty())
+    link.insertAfter(3,2)
+    link.show()
+    print(link.isEmpty())
+    #link.insertAfter(4,3)
+    link.delete(2)
+    link.show()
+
 
 #def test()
 '''
     link=linkNode()
     print(link.isEmpty())
 
-def test_insert():
-    link=linkNode()
-    link.insertbefore(1)
-    print(link.element)
-    link.insert(2)
-    print(link)
-    print(link.next)
-    for i in range(3,10):
-        link.insert(i)
-        print(link.next)
-    for i in range(1,3):
-        link.insert('a'*i+'b')
-        print(link.next)
-
-    print("hello world?")
-    link.count()
-    print(link.count())
-    print("hello world?")
-
-
-def test_delete():
-    link=linklist()
-    for i in range(10):
-        link.insert(i)
-    for i in range(3,5):
-        link.delete(i)
 
 def test_case():
     link=linkNode()
@@ -132,3 +118,24 @@ def test():
 if __name__ =='__main__':
     test()
 
+'''
+E:\Python27\python.exe "E:/my document/python/linklist.py"
+True
+False
+2
+1
+False
+5
+2
+1
+False
+5
+2
+3
+False
+5
+3
+
+Process finished with exit code 0
+
+'''
