@@ -75,20 +75,22 @@ class linklist():
 
 def test_isEmpty():
     link=linklist()
-    print(link.isEmpty())
+    assert (link.isEmpty()) is True
+
     node=linkNode(1,None)
     link.head=node
-    print(link.isEmpty())
+    assert (link.isEmpty()) is False
+
     link.insertBefore(2,1)
     link.show()
-    print(link.isEmpty())
+    assert (link.isEmpty()) is False
     #link.insertBefore(3,1)
     link.insertBefore(5,2)
     link.show()
-    print(link.isEmpty())
+    assert (link.isEmpty()) is False
     link.insertAfter(3,2)
     link.show()
-    print(link.isEmpty())
+    assert (link.isEmpty()) is False
     #link.insertAfter(4,3)
     link.delete(2)
     link.show()
@@ -118,24 +120,3 @@ def test():
 if __name__ =='__main__':
     test()
 
-'''
-E:\Python27\python.exe "E:/my document/python/linklist.py"
-True
-False
-2
-1
-False
-5
-2
-1
-False
-5
-2
-3
-False
-5
-3
-
-Process finished with exit code 0
-
-'''
