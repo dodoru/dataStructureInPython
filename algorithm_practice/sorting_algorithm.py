@@ -13,10 +13,10 @@ def random_list(num):
 
 def BubbleSort(list):
     for i in range(len(list)):
-        for j in range(i,len(list)-i-1):
+        for j in range(i+1,len(list)):
             print list[i],list[j]
-            if list[j]>list[j+1]:
-                list[j],list[j+1]=list[j+1],list[j]
+            if list[i]>list[j]:
+                list[i],list[j]=list[j],list[i]
     return list
 
 def InsertSort(list):
@@ -36,6 +36,14 @@ def QuickSort(list):
 
 def testBubbleSort():
     lst=random_list(4)
+    print lst
+    print BubbleSort(lst)
+
+    lst=random_list(6)
+    print lst
+    print BubbleSort(lst)
+
+    lst=random_list(7)
     print lst
     print BubbleSort(lst)
 
