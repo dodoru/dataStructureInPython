@@ -2,51 +2,65 @@
 from random import randint
 
 
-
 def random_list(num):
-    list=[]
-    i=0
-    while i<num:
-        list.append(randint(0,250))
-        i+=1
-    return list
+    lst = []
+    i = 0
+    while i < num:
+        list.append(randint(0, 250))
+        i += 1
+    return lst
 
-def BubbleSort(list):
-    for i in range(len(list)):
-        for j in range(i+1,len(list)):
-            print list[i],list[j]
-            if list[i]>list[j]:
-                list[i],list[j]=list[j],list[i]
-    return list
 
-def InsertSort(list):
+def BubbleSort(lst):
+    for i in range(len(lst)):
+        for j in range(i + 1, len(lst)):
+            print lst[i], lst[j]
+            if lst[i] > lst[j]:
+                lst[i], lst[j] = lst[j], lst[i]
+                print lst
+    return lst
+
+
+def InsertSort(lst):
+    for i in range(len(lst)):
+        j = i
+        while j > 0 and lst[j - 1] > lst[i]:
+            j -= 1
+        lst.insert(j, lst[i])
+        lst.pop(i + 1)
+
+
+def ShellSort(lst):
     pass
 
-def ShellSort(list):
+
+def MergeSort(lst):
     pass
 
-def MergeSort(list):
+
+def HeapSort(lst):
     pass
 
-def HeapSort(list):
+
+def QuickSort(lst):
     pass
 
-def QuickSort(list):
-    pass
 
 def testBubbleSort():
-    lst=random_list(4)
+    lst = random_list(4)
+    print lst
+    print BubbleSort(lst)
+    print "*" * 10
+
+    lst = random_list(6)
     print lst
     print BubbleSort(lst)
 
-    lst=random_list(6)
-    print lst
-    print BubbleSort(lst)
-
-    lst=random_list(7)
+    lst = random_list(7)
     print lst
     print BubbleSort(lst)
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     testBubbleSort()
+
