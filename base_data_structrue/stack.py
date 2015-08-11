@@ -1,5 +1,4 @@
 class Node():
-
     def __init__(self, element=None, next=None):
         self.element = element
         self.next = next
@@ -9,7 +8,6 @@ class Node():
 
 
 class Stack():
-
     def __init__(self):
         self.head = Node()
 

@@ -1,5 +1,4 @@
 class Node():
-
     def __init__(self, element=None, next=None, prev=None):
         self.element = element
         self.next = next
@@ -10,16 +9,15 @@ class Node():
 
 
 class LinkedList():
-
     def __init__(self, tail=None, count=0):
         self.head = Node()
         self.tail = tail
         self.count = count
 
-    def is_empty(self):                              # O(1)
+    def is_empty(self):  # O(1)
         return self.head.next is None
 
-    def insert_after(self, item, node):              # O(n)
+    def insert_after(self, item, node):  # O(n)
         temp_node = self.head
         insert_item = Node(item)
         if temp_node.next is None and node.element is None:
@@ -37,14 +35,14 @@ class LinkedList():
                     insert_item.prev = node
                 else:
                     insert_item.prev = node
-                    insert_item.next =node.next
+                    insert_item.next = node.next
                     node.next.prev = insert_item
                     node.next = insert_item
                 self.count += 1
                 return
         print("Can not find the node --- insert_after")
 
-    def insert_before(self, item, node):            # O(n)
+    def insert_before(self, item, node):  # O(n)
         temp_node = self.head
         insert_item = Node(item)
         if self.head.next is None and node.element is None:
@@ -70,7 +68,7 @@ class LinkedList():
             temp_node = temp_node.next
         print("Can not find the node --- insert_before")
 
-    def delete(self, element):                    # O(n)
+    def delete(self, element):  # O(n)
         temp_node = self.head.next
         while temp_node is not None:
             if temp_node.element == element:
@@ -91,7 +89,7 @@ class LinkedList():
             temp_node = temp_node.next
         print("Can not find the element --- delete(element)")
 
-    def find(self, item):                         # O(n)
+    def find(self, item):  # O(n)
         temp_node = self.head.next
         while temp_node is not None:
             if temp_node.element is item:
@@ -99,22 +97,22 @@ class LinkedList():
             temp_node = temp_node.next
         return None
 
-    def length(self):                              # O(1)
+    def length(self):  # O(1)
         return self.count
 
-    def first_node(self):                         # O(1)
+    def first_node(self):  # O(1)
         if self.is_empty():
             print("The linked list is empty --- firstNode")
         else:
             return self.head.next
 
-    def last_node(self):                          # O(1)
+    def last_node(self):  # O(1)
         if self.is_empty():
             print("The linked list is empty --- lastNode")
         else:
             return self.tail
 
-    def append(self, item):                       # O(1)
+    def append(self, item):  # O(1)
         insert_item = Node(item)
         if self.is_empty():
             self.head.next = insert_item
@@ -126,8 +124,8 @@ class LinkedList():
             insert_item.prev = self.tail
             self.tail = insert_item
             self.count += 1
-            
-    def reverse(self):                            # O(n\2)
+
+    def reverse(self):  # O(n\2)
         front = self.head.next
         rear = self.tail
         if front is None:
@@ -197,7 +195,7 @@ def testLinkedListReverse():
     testList.insert_after(4, testList.tail)
     testList.reverse()
     assert testList.first_node().element == 4 and testList.last_node().element == 3 and \
-            testList.first_node().next.element == 1 and testList.last_node().prev.element == 2
+           testList.first_node().next.element == 1 and testList.last_node().prev.element == 2
 
 
 def testLinkedListLength():
