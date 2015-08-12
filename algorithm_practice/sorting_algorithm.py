@@ -163,25 +163,25 @@ def MergeSort2(lst):
 3．再对左右区间重复第二步，直到各区间只有一个数。
 '''
 
-def partition(lst,low,high):
-    pivot=lst[high]
-    i=low-1
+
+def partition(lst, low, high):
+    pivot = lst[high]
+    i = low - 1
     # place for pivot
-    for j in range(low,high):
-        if lst[j]<=pivot:
-            i+=1
-            lst[i],lst[j]=lst[j],lst[i]
-    i+=1
-    lst[i],lst[high]=lst[high],lst[i]
+    for j in range(low, high):
+        if lst[j] <= pivot:
+            i += 1
+            lst[i], lst[j] = lst[j], lst[i]
+    i += 1
+    lst[i], lst[high] = lst[high], lst[i]
     return i
 
 
-def QuickSort(lst,low,high):
-    if low<high:
-        p=partition(lst,low,high)
-        QuickSort(lst,low,p-1)
-        QuickSort(lst,p+1,high)
-
+def QuickSort(lst, low, high):
+    if low < high:
+        p = partition(lst, low, high)
+        QuickSort(lst, low, p - 1)
+        QuickSort(lst, p + 1, high)
 
 
 '''

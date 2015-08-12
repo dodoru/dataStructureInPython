@@ -106,15 +106,16 @@ def test_MergeSort():
 def test_QuickSort():
     lst = random_list(8)
     print lst
-    print QuickSort(lst,0,7)
+    print QuickSort(lst, 0, 7)
     print lst
     print "* " * 20
 
     lst = random_list(5)
     print lst
-    print QuickSort(lst,0,4)
+    print QuickSort(lst, 0, 4)
     print lst
     print "* " * 20
+
 
 if __name__ == '__main__':
     # test_BubbleSort()
