@@ -2,7 +2,8 @@
 
 from random import randint
 
-MAXNUM=500
+MAXNUM = 500
+
 
 def random_list(num):
     list = []
@@ -105,14 +106,81 @@ def ShellSort2(lst):
     return lst
 
 
-def MergeSort(list):
-    pass
+'''
+Conceptually, a merge sort works as follows:
+Divide the unsorted list into n sublists, each containing 1 element (a list of 1 element is considered sorted).
+Repeatedly merge sublists to produce new sorted sublists until there is only 1 sublist remaining.
+This will be the sorted list.
+'''
 
 
+def MergeSort(lst):
+    if len(lst) <= 1:
+        return lst
+
+    left = MergeSort(lst[:len(lst) / 2])
+    right = MergeSort(lst[len(lst) / 2: len(lst)])
+    result = []
+    while len(left) > 0 and len(right) > 0:
+        if left[0] < right[0]:
+            result.append(left.pop(0))
+        else:
+            result.append(right.pop(0))
+        print "result ：", result
+
+    if len(left) > 0:
+        # print "left : ", left
+        result.extend(MergeSort(left))
+    else:
+        # print "right : ", right
+        result.extend(MergeSort(right))
+    return result
 
 
-def QuickSort(list):
-    pass
+def MergeSort2(lst):
+    def Merge(left, right):
+        result = []
+        left = sorted(left)
+        right = sorted(right)
+        while left and right:
+            if left[0] < right[0]:
+                result.append(left.pop(0))
+            else:
+                result.append(right.pop(0))
+        return result + left + right
+
+    mid = len(lst) / 2
+    if len(lst) <= 1:
+        return lst
+    else:
+        return Merge(MergeSort2(lst[:mid]), MergeSort2(lst[mid:]))
+
+
+'''
+快速排序：最坏 n^2  最好 （n log n）,普遍(n log n)
+1．先从数列中取出一个数作为基准数。
+2．分区过程，将比这个数大的数全放到它的右边，小于或等于它的数全放到它的左边。
+3．再对左右区间重复第二步，直到各区间只有一个数。
+'''
+
+def partition(lst,low,high):
+    pivot=lst[high]
+    i=low-1
+    # place for pivot
+    for j in range(low,high):
+        if lst[j]<=pivot:
+            i+=1
+            lst[i],lst[j]=lst[j],lst[i]
+    i+=1
+    lst[i],lst[high]=lst[high],lst[i]
+    return i
+
+
+def QuickSort(lst,low,high):
+    if low<high:
+        p=partition(lst,low,high)
+        QuickSort(lst,low,p-1)
+        QuickSort(lst,p+1,high)
 
 
 
@@ -122,87 +190,11 @@ def QuickSort(list):
 利用完全二叉树中双亲结点和孩子结点之间的内在关系来选择最小的元素。
 
 '''
+
+
 def HeapSort(list):
     pass
 
 
 
 
-def test_BubbleSort():
-    lst = random_list(4)
-    print lst
-    print BubbleSort(lst)
-
-    lst = random_list(6)
-    print lst
-    print BubbleSort(lst)
-
-    lst = random_list(7)
-    print lst
-    print BubbleSort(lst)
-
-
-def test_InsertSort():
-    lst = random_list(4)
-    print lst
-    print InsertSort(lst)
-    print "*" * 15
-
-    lst = random_list(5)
-    print lst
-    print InsertSort(lst)
-    print "*" * 15
-
-    lst = random_list(6)
-    print lst
-    print InsertSort(lst)
-    print "*" * 15
-
-
-def test_InsertSort2():
-    lst = random_list(6)
-    print lst
-    print InsertSort2(lst)
-    print "*" * 15
-
-    lst = random_list(7)
-    print lst
-    print InsertSort2(lst)
-    print "*" * 15
-
-    lst = random_list(8)
-    print lst
-    print InsertSort2(lst)
-    print "*" * 15
-
-
-def test_ShellSort():
-    lst = random_list(4)
-    print lst
-    print ShellSort(lst)
-    print ShellSort2(lst)
-    print "*" * 35
-
-    lst = random_list(5)
-    print lst
-    print ShellSort(lst)
-    print ShellSort2(lst)
-    print "*" * 35
-
-    lst = random_list(6)
-    print lst
-    print ShellSort(lst)
-    print ShellSort2(lst)
-    print "*" * 35
-
-    lst = random_list(7)
-    print lst
-    print ShellSort(lst)
-    print ShellSort2(lst)
-    print "*" * 35
-
-
-if __name__ == '__main__':
-    # test_BubbleSort()
-    # test_InsertSort2()
-    test_ShellSort()
