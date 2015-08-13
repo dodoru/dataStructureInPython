@@ -118,9 +118,10 @@ def test_QuickSort():
 
 
 def test_default_quick_sort():
-    lst=random_list(8)
+    lst = random_list(8)
     print lst
     print default_quick_sort(lst)
+
 
 if __name__ == '__main__':
     # test_BubbleSort()

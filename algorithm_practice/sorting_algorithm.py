@@ -185,26 +185,27 @@ def QuickSort(lst, low, high):
 
 
 def default_quick_sort(lst):
-    def quick_partition(lst,low,high):
-        pivot=lst[high]
-        i=low-1
+    def quick_partition(lst, low, high):
+        pivot = lst[high]
+        i = low - 1
         # place for pivot
-        for j in range(low,high):
-            if lst[j]<=pivot:
-                i+=1
-                lst[i],lst[j]=lst[j],lst[i]
-        i+=1
-        lst[i],lst[high]=lst[high],lst[i]
+        for j in range(low, high):
+            if lst[j] <= pivot:
+                i += 1
+                lst[i], lst[j] = lst[j], lst[i]
+        i += 1
+        lst[i], lst[high] = lst[high], lst[i]
         return i
 
-    def recursion_sort(lst,low,high):
-        if low<high:
-            p=partition(lst,low,high)
-            QuickSort(list,low,p-1)
-            QuickSort(list,p+1,high)
+    def recursion_sort(lst, low, high):
+        if low < high:
+            p = partition(lst, low, high)
+            QuickSort(list, low, p - 1)
+            QuickSort(list, p + 1, high)
 
-    recursion_sort(lst,0,len(lst)-1)
+    recursion_sort(lst, 0, len(lst) - 1)
     return lst
+
 
 '''
 堆排序：不稳定，时间复杂度 O(n log n)
