@@ -117,9 +117,15 @@ def test_QuickSort():
     print "* " * 20
 
 
+def test_default_quick_sort():
+    lst=random_list(8)
+    print lst
+    print default_quick_sort(lst)
+
 if __name__ == '__main__':
     # test_BubbleSort()
     # test_InsertSort2()
     # test_ShellSort()
     # test_MergeSort()
-    test_QuickSort()
+    # test_QuickSort()
+    test_default_quick_sort()
