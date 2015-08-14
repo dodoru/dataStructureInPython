@@ -53,6 +53,13 @@ class DoubleLinkedList():
             index_node = index_node.rear
         return None
 
+    def pop_tail(self):
+        tail_element = self.tail.element
+        self.tail = self.tail.prev
+        self.tail.rear = None
+        self.total -= 1
+        return tail_element
+
     def remove(self, element):
         index_node = self.find(element)
         if index_node:
@@ -134,9 +141,31 @@ class DoubleLinkedList():
     def count(self):
         return self.total
 
+    # Fixme , once you move the self.tail, the index_node will be moved too.
+    def reverse(self):
+        index_node = Node()
+        # index_node.prev=self.tail
+        if not self.is_empty():
+            index_node = Node()
+            temp_node = self.tail
+            index_node.prev = self.tail
+            self.head.rear.prev = None
+            self.head.rear = self.tail
+            # self.tail.prev = self.head
+            while index_node:
+                print index_node
+                index_node = index_node.prev
+
+    # this reverse2() will clear self to NULL .Bad Idea
+    def reverse2(self):
+        dl = DoubleLinkedList()
+        while not self.is_empty():
+            dl.append(self.pop_tail())
+        return dl
+
 
 def test():
-    l=DoubleLinkedList()
+    l = DoubleLinkedList()
     l.append(1)
     l.append(2)
     l.append(3)
@@ -157,12 +186,14 @@ def test():
     print l
     l.deletes(4)
     print l
-    l.insert_after(3,1)
-    l.insert_after(2,1)
+    l.insert_after(3, 1)
+    l.insert_after(2, 1)
     print l
-    l.insert_before(4,1)
-    l.insert_before(1,4)
+    l.insert_before(4, 1)
+    l.insert_before(1, 4)
     print l
+    dl = l.reverse()
+    print dl
 
 
 if __name__ == "__main__":

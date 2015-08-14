@@ -199,11 +199,11 @@ def default_quick_sort(lst):
 
     def recursion_sort(lst, low, high):
         if low < high:
-            p = partition(lst, low, high)
-            QuickSort(list, low, p - 1)
-            QuickSort(list, p + 1, high)
+            p = quick_partition(lst, low, high)
+            recursion_sort(lst, low, p - 1)
+            recursion_sort(lst, p + 1, high)
 
-    recursion_sort(lst, 0, len(lst) - 1)
+    recursion_sort(lst, 0, (len(lst) - 1))
     return lst
 
 
