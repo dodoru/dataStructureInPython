@@ -141,23 +141,36 @@ class DoubleLinkedList():
     def count(self):
         return self.total
 
-    # Fixme , once you move the self.tail, the index_node will be moved too.
+    # reverse the link , ok
     def reverse(self):
-        index_node = Node()
-        # index_node.prev=self.tail
-        if not self.is_empty():
-            index_node = Node()
-            temp_node = self.tail
-            index_node.prev = self.tail
-            self.head.rear.prev = None
+        if self.total > 1:
+            index_node = self.tail.prev
+            self.tail = Node(element=self.tail.element, prev=self.head, rear=None)
             self.head.rear = self.tail
-            # self.tail.prev = self.head
-            while index_node:
-                print index_node
+
+            while index_node.prev:
+                # print index_node
+                #
+                node = Node(element=index_node.element)
+                self.tail.rear = node
+                node.prev = self.tail
+                self.tail = self.tail.rear
                 index_node = index_node.prev
 
-    # this reverse2() will clear self to NULL .Bad Idea
+
     def reverse2(self):
+        if self.total > 1:
+            index_node = Node(element=self.tail.element, prev=self.tail.prev, rear=self.head)
+            self.head.rear = index_node
+            while index_node.prev:
+                print index_node
+                index_node.prev, index_node.rear = index_node.rear, index_node.prev
+                index_node = index_node.rear
+            self.tail = index_node
+
+
+    # this reverse3() will clear self to NULL .Bad Idea
+    def reverse3(self):
         dl = DoubleLinkedList()
         while not self.is_empty():
             dl.append(self.pop_tail())
@@ -192,8 +205,11 @@ def test():
     l.insert_before(4, 1)
     l.insert_before(1, 4)
     print l
-    dl = l.reverse()
-    print dl
+    # dl = l.reverse()
+    l.reverse()
+    print "reverse:", l
+    l.reverse2()
+    print "revers2() ,", l
 
 
 if __name__ == "__main__":
