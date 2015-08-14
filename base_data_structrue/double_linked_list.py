@@ -157,7 +157,7 @@ class DoubleLinkedList():
                 self.tail = self.tail.rear
                 index_node = index_node.prev
 
-
+    # Fixme , why results null?
     def reverse2(self):
         if self.total > 1:
             index_node = Node(element=self.tail.element, prev=self.tail.prev, rear=self.head)
