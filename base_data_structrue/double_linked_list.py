@@ -169,12 +169,16 @@ class DoubleLinkedList():
             self.tail = index_node
 
 
-    # this reverse3() will clear self to NULL .Bad Idea
+    # this reverse3() is exchange the elements of front and the behind
     def reverse3(self):
-        dl = DoubleLinkedList()
-        while not self.is_empty():
-            dl.append(self.pop_tail())
-        return dl
+        if self.total > 1:
+            front = self.head.rear
+            behind = self.tail
+            index = self.total / 2
+            for i in range(index):
+                front.element, behind.element = behind.element, front.element
+                front = front.rear
+                behind = behind.prev
 
 
 def test():
@@ -208,8 +212,8 @@ def test():
     # dl = l.reverse()
     l.reverse()
     print "reverse:", l
-    l.reverse2()
-    print "revers2() ,", l
+    l.reverse3()
+    print "revers3() ,", l
 
 
 if __name__ == "__main__":
