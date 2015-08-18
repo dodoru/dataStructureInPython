@@ -9,8 +9,9 @@ def Josephus(arr, k):
     j = 0  # 标记每一轮最后挂掉的那个的位置
     b = []  # 放尸体，挂掉的数据扔进来这里
     while len(arr) >= k:
-        for i in range(0, len(arr) / k):
-            j = (i * k + k - offset - i - 1) % len(arr)  # 标记下标
+        n = len(arr) / k  # 每一轮for 循环 要删掉的个数
+        for i in range(1, n + 1):
+            j = (i * (k - 1) - offset) % len(arr)  # 标记下标
             b.append(arr[j])  # 记录死亡名单
             del arr[j]  # 把它挂掉
             print arr, b  # 打印看看，看看有没有挂错
@@ -35,8 +36,8 @@ def test2():
 
 
 if __name__ == "__main__":
-    # test1()
-    test2()
+    test1()
+    # test2()
 
 '''
 test1() results  第三轮，最后死掉的不应该是4，而是5.但是此后如果以4为标准，就没错了。
