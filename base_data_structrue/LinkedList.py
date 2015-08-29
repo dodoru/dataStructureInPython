@@ -243,6 +243,7 @@ def testLinkedListCreation():
 def test():
     testNodeCreation()
     testLinkedListCreation()
+    print 1
 
 
 if __name__ == '__main__':

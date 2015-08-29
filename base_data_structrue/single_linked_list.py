@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+
 class linkNode(object):
     def __init__(self, element=None, next=None):
         self.element = element
