@@ -1,10 +1,13 @@
 # coding:utf-8
+# 三大法宝： 头节点 多指针 删next
+# 任何节点进来都用个头节点指向它  然后再删除查找都不需要特殊判断
+
 
 class Node():
-    def __init__(self, element=None, prev=None, rear=None):
+    def __init__(self, element=None, prev=None, next=None):
         self.element = element
         self.prev = prev
-        self.rear = rear
+        self.next = next
 
     def __repr__(self):
         return repr(self.element)
@@ -12,169 +15,161 @@ class Node():
 
 class DoubleLinkedList():
     def __init__(self, tail=None, count=0):
-        self.head = Node()
+        self.head = None
         self.tail = tail
         self.total = count
 
     def __repr__(self):
         description = ' DoubleLinkedList: '
-        node = self.head.rear
+        node = self.head
         while node is not None:
             description += (' ' + repr(node.element))
-            node = node.rear
+            node = node.next
         return description
 
     def is_empty(self):
-        return self.head.rear is None
-        # return self.total
+        return self.total == 0
 
     def append(self, element):
         node = Node(element=element)
         if self.is_empty():
-            self.head.rear = node
-            node.prev = self.head
-
+            self.head = node
             self.tail = node
             self.total += 1
-
         else:
-            self.tail.rear = node
+            self.tail.next = node
             node.prev = self.tail
-
             self.tail = node
             self.total += 1
 
     def find(self, element):
-        index_node = self.head.rear
+        index_node = self.head
         while index_node:
             if index_node.element == element:
                 return index_node
-                # only returns the first node
-            index_node = index_node.rear
+            index_node = index_node.next
         return None
 
-    def pop_tail(self):
-        tail_element = self.tail.element
-        self.tail = self.tail.prev
-        self.tail.rear = None
-        self.total -= 1
-        return tail_element
+    def pop(self):
+        if self.total == 0:
+            return None
+        elif self.total == 1:
+            element = self.head
+            self.head = None
+            self.tail = None
+            self.total -= 1
+            return element
+        else:
+            element = self.tail
+            self.tail = self.tail.prev
+            self.tail.next = None
+            self.total -= 1
+            return element
 
     def remove(self, element):
-        index_node = self.find(element)
-        if index_node:
-            if index_node == self.tail:
-                self.tail = self.tail.prev
-                self.tail.rear = None
-                self.total -= 1
-            else:
-                index_node.prev.rear = index_node.rear
-                index_node.rear.prev = index_node.prev
-                self.total -= 1
-        else:
-            print (" no such element")
-
-
-    # delete every node while node.element==element
-    def deletes(self, element):
-        index_node = self.head.rear
+        '''
+        :param element: the first node which node.element==element
+        :return : tips
+        '''
+        index_node = self.head
         while index_node:
             if index_node.element == element:
+                self.total -= 1
+                if index_node == self.head:
+                    self.head = self.head.next
+                    self.head.prev = None
                 if index_node == self.tail:
                     self.tail = self.tail.prev
-                    self.tail.rear = None
-                    self.total -= 1
+                    self.tail.next = None
                 else:
-                    index_node.prev.rear = index_node.rear
-                    index_node.rear.prev = index_node.prev
-                    self.total -= 1
-            index_node = index_node.rear
+                    index_node.prev.next = index_node.next
+                    index_node.next.prev = index_node.prev
+                return "remove the first element values {0} successful".format(element)
+            index_node = index_node.next
+        return "no such element in the link."
 
+    def deletes(self, element):
+        '''
+        :param element: delete nodes while node.element==element
+        :return: self
+        '''
+        index_node = self.head
+        while index_node:
+            if index_node.element == element:
+                self.total -= 1
+                if index_node == self.head:
+                    self.head = self.head.next
+                    self.head.prev = None
+                elif index_node == self.tail:
+                    self.tail = self.tail.prev
+                    self.tail.next = None
+                else:
+                    index_node.prev.next = index_node.next
+                    index_node.next.prev = index_node.prev
+            index_node = index_node.next
+            # return self
 
-    def insert_after(self, index_element, insert_element):
-        index_node = self.find(index_element)
-        insert_node = Node(element=insert_element)
-        if index_node:
-            if index_node == self.tail:
-                # self.append(insert_element)
-                self.tail.rear = insert_node
-                insert_node.prev = self.tail
-                self.tail = insert_node
+    def insert_after(self, pos_element, insert_element):
+        index_node = self.head
+        while index_node:
+            if index_node.element == pos_element:
                 self.total += 1
-            else:
-                insert_node.prev = index_node
-                insert_node.rear = index_node.rear
-                index_node.rear.prev = insert_node
-                index_node.rear = insert_node
+                node = Node(element=insert_element)
+                if index_node == self.tail:
+                    index_node.next = node
+                    node.prev = index_node
+                    self.tail = node
+                else:
+                    node.next = index_node.next
+                    index_node.next.prev = node
+                    index_node.next = node
+                    node.prev = index_node
+                return 'Insert OK. '
+            index_node = index_node.next
+        return "Can't find the position.no element values {0}".format(pos_element)
+
+    def insert_before(self, pos_element, insert_element):
+        index_node = self.tail
+        while index_node:
+            if index_node.element == pos_element:
                 self.total += 1
-        else:
-            print "can't find index_element."
+                node = Node(element=insert_element)
+                if index_node == self.head:
+                    index_node.prev = node
+                    node.next = index_node
+                    self.head = node
+                else:
+                    node.prev = index_node.prev
+                    index_node.prev.next = node
+                    index_node.prev = node
+                    node.next = index_node
+                return 'Insert OK.'
+            index_node = index_node.prev
+        return "Can't find the position.no element values {0}".format(pos_element)
 
+    def first_node_element(self):
+        return self.head
 
-    def insert_before(self, index_element, insert_element):
-        insert_node = Node(element=insert_element)
-        index_node = self.find(index_element)
-        if index_node:
-            insert_node.rear = index_node
-            insert_node.prev = index_node.prev
-            index_node.prev.rear = insert_node
-            index_node.prev = insert_node
-            self.total += 1
-        else:
-            print "can't find index_element. "
-
-
-    def first_node(self):
-        if self.is_empty():
-            print("This is an empty double_linked_list.")
-        else:
-            return self.head.rear
-
-
-    def last_node(self):
-        if self.is_empty():
-            print("This is an empty double_linked_list.")
-        else:
-            return self.tail
-
+    def last_node_element(self):
+        return self.tail
 
     def count(self):
         return self.total
 
-    # reverse the link , ok
+    '''
+    @property
+    def total(self):
+        raise AttributeError("self.total can't be read.")
+    '''
+
     def reverse(self):
-        if self.total > 1:
-            index_node = self.tail.prev
-            self.tail = Node(element=self.tail.element, prev=self.head, rear=None)
-            self.head.rear = self.tail
-
-            while index_node.prev:
-                # print index_node
-                #
-                node = Node(element=index_node.element)
-                self.tail.rear = node
-                node.prev = self.tail
-                self.tail = self.tail.rear
-                index_node = index_node.prev
-
-    # Fixme , why results null?
-    def reverse2(self):
-        if self.total > 1:
-            index_node = Node(element=self.tail.element, prev=self.tail.prev, rear=self.head)
-            self.head.rear = index_node
-            while index_node.prev:
-                print index_node
-                index_node.prev, index_node.rear = index_node.rear, index_node.prev
-                index_node = index_node.rear
+        index_node = self.tail
+        self.head = index_node
+        while index_node:
+            index_node.prev, index_node.next = index_node.next, index_node.prev
             self.tail = index_node
-
-
-    # this reverse3() will clear self to NULL .Bad Idea
-    def reverse3(self):
-        dl = DoubleLinkedList()
-        while not self.is_empty():
-            dl.append(self.pop_tail())
-        return dl
+            index_node = index_node.next
+            # self.tail=index.node : error,self.tail would be None
 
 
 def test():
@@ -186,30 +181,33 @@ def test():
     l.append(5)
     l.append(5)
     l.append(4)
-    l.append(6)
-    l.append(4)
-    print l
-    l.remove(2)
-    print l
-    l.remove(4)
-    print l
-    l.deletes(1)
-    print l
-    l.deletes(5)
-    print l
-    l.deletes(4)
-    print l
-    l.insert_after(3, 1)
-    l.insert_after(2, 1)
-    print l
-    l.insert_before(4, 1)
-    l.insert_before(1, 4)
-    print l
-    # dl = l.reverse()
+    # l.append(6)
+    # l.append(4)
+    print(l)
+    print l.last_node_element()
     l.reverse()
-    print "reverse:", l
-    l.reverse2()
-    print "revers2() ,", l
+    print("revers(): {}".format(l))
+    print l.find(5)
+    print l.find(6)
+    print l.last_node_element()
+    print l.pop()
+    print l
+    print l.remove(5)
+    print l.deletes(4)
+    print l.insert_before(2, 8)
+    print l
+    print l.insert_after(2, 7)
+    print l
+    print l.insert_before(5, 1)
+    print l
+    print l.insert_after(5, 1)
+    print l
+    b = DoubleLinkedList()
+    b.append(1)
+    b.append(2)
+    print b
+    b.reverse()
+    print b
 
 
 if __name__ == "__main__":
