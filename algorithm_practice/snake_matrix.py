@@ -171,6 +171,10 @@ def diagonal_snake(arr):
 
 
 def test_nm():
+    
+    # a = create_array_nm(8, 5) # n>m OK
+    # a = create_array_nm(6, 8) # n<m & m-n=2 OK
+    # a = create_array_nm(6, 9) # false Fixme
     a = create_array_nm(6, 8)
     show_array(a)
     print "_" * 30
