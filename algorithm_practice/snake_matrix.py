@@ -47,7 +47,7 @@ def diagonal_nn(arr):
         diag.append(part)
 
     # print right-bottle triangle
-    for i in range(len(arr), len(arr) * 2):
+    for i in range(len(arr), len(arr) * 2 - 1):
         part = []
         for j in range(i - len(arr) + 1, len(arr)):
             # print arr[j][i - j]
@@ -137,6 +137,16 @@ def diagonal_right_bottom(arr):
     diag = []
     n = len(arr)
     m = len(arr[0])
+    maxi = max(n, m)
+    for i in range(maxi, m + n - 1):
+        part = []
+        for j in range(i - m + 1, n):
+            part.append(arr[j][i - j])
+        diag.append(part)
+    return diag
+
+
+""" # ordinal code
     if n > m:
         for i in range(n, m + n):
             part = []
@@ -152,6 +162,7 @@ def diagonal_right_bottom(arr):
                 part.append(arr[j][i - j])
             diag.append(part)
     return diag
+    """
 
 
 def diagonal_snake(arr):
@@ -162,14 +173,16 @@ def diagonal_snake(arr):
 
 
 def test_nm():
-    a = create_array_nm(7, 3)
+    a = create_array_nm(4, 6)
     # test (2,4)(3,4)(4,4)(5,4)(6,4)(7,4) etc OK
     show_array(a)
-    print "_" * 30
-    '''
-    b = diagonal_nm(a)
+    print "_" * 30 + "nXn" + '_' * 30
+
+    b = diagonal_nn(a)
     show_array(b)
-    print "_" * 30
+    print "_" * 30 + "nXm" + '_' * 30
+
+    '''
     c = diagonal_left_top(a)
     show_array(c)
     print "_" * 30
