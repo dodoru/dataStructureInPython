@@ -66,7 +66,12 @@ def test_nn():
     print "_" * 20
 
 
-############## n*n 测试正常 #################
+"""
+解决n*m 所有的情况。
+基本思路是，把它划分三份，左上角三角形的矩阵，中间平行四边形的矩阵，右下角三角形的矩阵。
+"""
+
+
 def create_array_nm(n, m):
     arr = [[0] * m for i in range(n)]
     for i in range(n):
@@ -76,6 +81,13 @@ def create_array_nm(n, m):
 
 
 def diagonal_left_top(arr):
+    '''
+    :return 把左上角矩三角形的矩阵遍历出来放在 diag
+    diag: 存取左上角的多维数列
+    part: 每一次斜线取的数列
+    i: 因为每次斜线的 点坐标（x,y） 的和为恒定值，依次递增
+    j: 每次斜线都是从第一行开始取数的
+    '''
     diag = []
     n = len(arr)
     m = len(arr[0])
@@ -85,33 +97,17 @@ def diagonal_left_top(arr):
         for j in range(i + 1):
             part.append(arr[j][i - j])
         diag.append(part)
-    # diag.pop() # last value is []
-    return diag
-
-
-def diagonal_right_bottom(arr):
-    diag = []
-    n = len(arr)
-    m = len(arr[0])
-    if n > m:
-        for i in range(n, m + n):
-            part = []
-            for j in range(i - m + 1, n):
-                # print j, i - j
-                part.append(arr[j][i - j])
-            diag.append(part)
-    else:
-        for i in range(m, m + n - 1):
-            part = []
-            for j in range(i - n - 1, n):
-                # fixme
-                part.append(arr[j][i - j])
-            diag.append(part)
-    # diag.pop() # last is []
     return diag
 
 
 def diagonal_middle(arr):
+    '''
+    :return 当n!=m, 把遍历的中间的平行四边形矩阵内容（不包括左上角三角形的底边）遍历出来放在 diag
+    diag: 存取左上角的多维数列
+    part: 每一次斜线取的数列
+    i: 因为每次斜线的 点坐标（x,y） 的和为恒定值，依次递增
+    j: 每次斜线都是从第一行开始取数的
+    '''
     diag = []
     n, m = len(arr), len(arr[0])
     mini, maxi = min(n, m), max(n, m)
@@ -130,36 +126,31 @@ def diagonal_middle(arr):
     return diag
 
 
-def diagonal_nm(arr):
+def diagonal_right_bottom(arr):
     '''
-    arr[n][m],n!=m
-    :param arr: list of number matrix
-    :return a[0][0],a[0][1],a[1][0]
+    :return 把右下角矩形遍历出来放在 diag
+    diag: 存取右下角三角形矩阵的多维数列，当n=n,不包含左上角三角形
+    part: 每一次斜线取的数列
+    i: 因为每次斜线的 点坐标（x,y）的和为恒定值，依次递增
+    j: 每次斜线都是从第2行开始取数的，因为第一行已经被左上角三角形矩阵或者中间平行四边形矩阵遍历过了。
     '''
     diag = []
     n = len(arr)
     m = len(arr[0])
     if n > m:
-        for i in range(0, m):
+        for i in range(n, m + n):
             part = []
-            for j in range(0, i + 1):
-                # print arr[j][i-j]
+            for j in range(i - m + 1, n):
+                # print j, i - j
                 part.append(arr[j][i - j])
             diag.append(part)
-        for i in range(m, n):
-            part = []
-            for j in range(m - 1, -1, -1):
-                # print arr[i-j][j]
-                part.append(arr[i - j][j])
-            diag.append(part)
-
-        diag += diagonal_right_bottom(arr)
-    elif n == m:
-        diag = diagonal_nn(arr)
     else:
-        for i in range(0, n):
-            for j in range(0, m - 1):
-                print i, j
+        for i in range(m, m + n):
+            part = []
+            for j in range(i - m + 1, n):
+                # fixme OK ,test ok
+                part.append(arr[j][i - j])
+            diag.append(part)
     return diag
 
 
@@ -171,11 +162,8 @@ def diagonal_snake(arr):
 
 
 def test_nm():
-    
-    # a = create_array_nm(8, 5) # n>m OK
-    # a = create_array_nm(6, 8) # n<m & m-n=2 OK
-    # a = create_array_nm(6, 9) # false Fixme
-    a = create_array_nm(6, 8)
+    a = create_array_nm(7, 3)
+    # test (2,4)(3,4)(4,4)(5,4)(6,4)(7,4) etc OK
     show_array(a)
     print "_" * 30
     '''
