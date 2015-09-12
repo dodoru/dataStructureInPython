@@ -3,8 +3,8 @@
 # import re   # match the farmat symbols with RegEx
 
 SYMBOL_VALUES = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
-# SYMBOL_DICT = {'glob': 'I', 'prok': 'V', 'pish': 'X', 'tegi': 'L'}
-SYMBOL_DICT = {}
+SYMBOL_DICT = {'glob': 'I', 'prok': 'V', 'pish': 'X', 'tegj': 'L'}
+# SYMBOL_DICT = {}
 METAL_DICT = {}
 
 
@@ -70,8 +70,17 @@ def check_sentence_symbol(sentence):
     price = 0
     amount = 0
     j = 0  # count number of the symbol char
+    k = 0  # index of 'is'
+    try:
+        k = seqs.index('is')
+    except:
+        pass
+    for s in seqs:
+        if s in SYMBOL_DICT.iterkeys():
+            symbols += SYMBOL_DICT.get(s)
+            j += 1
 
-    if (seqs[j] == 'is') and (len(seqs) == 3) and (seqs[2] in SYMBOL_VALUES.iterkeys()):
+    if (j == k) and (len(seqs) == 3) and (seqs[2] in SYMBOL_VALUES.iterkeys()):
         # insert into SYMBOL_DICT , eg : glob is I
         SYMBOL_DICT[seqs[0]] = seqs[2]
         return None
@@ -81,7 +90,7 @@ def check_sentence_symbol(sentence):
         count = Symbols(symbols)
         if count.is_format():
             metal = seqs[j]
-            # price = int(seqs[j + 2]) / int(count.get_values())
+            price = int(seqs[k + 1]) / int(count.get_values())
             METAL_DICT[metal] = price
             # print METAL_DICT
         return None
@@ -89,7 +98,6 @@ def check_sentence_symbol(sentence):
     elif seqs[-1] == '?' and len(seqs) > 3:
         # this is a question, so get the price of the metals.
         count = Symbols(symbols)
-        k = seqs.index('is')  # index of 'is'
         if count.is_format():
             if seqs[1] == 'many':
                 # eg ：how many Credits is glob prok Silver ?
@@ -101,7 +109,7 @@ def check_sentence_symbol(sentence):
             elif seqs[1] == 'much':
                 # eg: how much is pish tegj glob glob ?
                 if seqs[k + 1] in SYMBOL_DICT.iterkeys():
-                    return u"{0} is {1} ".format(' '.join(seqs[k + 1:k + j + 2]), count.get_values())
+                    return u"{0} is {1} ".format(' '.join(seqs[k + 1:k + j + 1]), count.get_values())
         else:
             return "I have no idea what you are talking about "
 
@@ -116,9 +124,8 @@ def test():
     print a.get_values()
     print b.get_values()
     print c.get_values()
+    print "**************test input ************"
 
-
-def test_input():
     inputs = '''glob is I
 prok is V
 pish is X
@@ -133,15 +140,22 @@ how many Credits is glob prok Iron ?
 how much wood could a woodchuck chuck if a woodchuck could chuck wood ?'''
     sentences = inputs.splitlines()
     for sentence in sentences:
-        print sentence
-        check_sentence_symbol(sentence)
-        print "*" * 10
-    print SYMBOL_DICT
+        if check_sentence_symbol(sentence):
+            print check_sentence_symbol(sentence)
+            # print "*"*10
+
+
+def test_input(*args):
+    sentence = raw_input("test input")
+    if check_sentence_symbol(sentence):
+        print check_sentence_symbol(sentence)
+
+
 
 
 if __name__ == '__main__':
-    # test()
-    test_input()
+    test()
+    # test_input()
 
 
 
