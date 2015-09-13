@@ -3,8 +3,8 @@
 # import re   # match the farmat symbols with RegEx
 
 SYMBOL_VALUES = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
-SYMBOL_DICT = {'glob': 'I', 'prok': 'V', 'pish': 'X', 'tegj': 'L'}
-# SYMBOL_DICT = {}
+# SYMBOL_DICT = {'glob': 'I', 'prok': 'V', 'pish': 'X', 'tegj': 'L'}
+WORD_DICT = {}
 METAL_DICT = {}
 
 
@@ -63,53 +63,38 @@ class Symbols(object):
             return value
 
 
-def check_sentence_symbol(sentence):
-    seqs = sentence.split()
-    symbols = ''
-    j = 0  # count number of the symbol char
-    k = 0  # index of 'is'
+def error():
+    error_message = 'I have no idea what you are talking about '
+    print(error_message)
+
+
+def interpret(s):
+    question_primitive = 'how much is'
+    question_unit = 'how many'
+    # a.split('how much is')[-1].split()
+    # ['pish', 'tegj', 'glob', 'glob', '?']
     try:
-        k = seqs.index('is')
-    except:
         pass
-
-    for s in seqs:
-        if s in SYMBOL_DICT.iterkeys():
-            symbols += SYMBOL_DICT.get(s)
-            j += 1
-
-    if (j == k) and (len(seqs) == 3):
-        # insert into SYMBOL_DICT , eg : glob is I
-        SYMBOL_DICT[seqs[0]] = seqs[2]
-
-    elif seqs[-1] != '?' and len(seqs) > 3:
-        # if assertive sentence then get price and metal name ,eg : glob glob Silver is 34 Credits
-        count = Symbols(symbols)
-        if count.is_format():
-            metal = seqs[j]
-            price = int(seqs[k + 1]) / float(count.get_values())
-            METAL_DICT[metal] = price
-
-    elif seqs[-1] == '?':
-        # this is a question, so get the price of the metals.
-        count = Symbols(symbols)
-        if count.is_format():
-            if seqs[1] == 'many':
-                # eg ：how many Credits is glob prok Silver ?
-                metal = seqs[-2]
-                price = METAL_DICT.get(metal)
-                amount = int(price * count.get_values())
-                return u"{0} is {1} Credits".format(' '.join(seqs[k + 1:-1]), amount)
-
-            elif seqs[1] == 'much':
-                # eg: how much is pish tegj glob glob ?
-                if seqs[k + 1] in SYMBOL_DICT.iterkeys():
-                    return u"{0} is {1} ".format(' '.join(seqs[k + 1:k + j + 1]), count.get_values())
-
-        return "I have no idea what you are talking about "
-
-    else:
-        return "I have no idea what you are talking about "
+        if s.startswith(question_primitive):
+            alien_list = s.split(question_primitive)[-1].split()
+            roman = roman_from_alien_list(alien_list)
+        elif s.startswith(question_unit):
+            pass
+        elif len(s.split('is')) == 2:
+            info = s.split('is')
+            unit = info[1].split()
+            if unit == 1:
+                word_roman_dict[info[0]] = info[1]
+            elif unit == 2:
+                # add to currency_dict
+                pass
+            else:
+                error()
+        else:
+            error()
+            pass
+    except Exception, e:
+        error()
 
 
 def test():
@@ -148,8 +133,7 @@ def test_input(*args):
 
 if __name__ == '__main__':
     test()
-    print "test input"
-    test_input()
+    # test_input()
 
 
 
