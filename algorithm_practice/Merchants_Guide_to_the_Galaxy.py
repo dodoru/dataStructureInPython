@@ -4,8 +4,8 @@
 
 SYMBOL_VALUES = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
 # SYMBOL_DICT = {'glob': 'I', 'prok': 'V', 'pish': 'X', 'tegj': 'L'}
-WORD_DICT = {}
-METAL_DICT = {}
+WORD_SYMBOL_DICT = {}  # the word index different symbol
+METAL_PRICE_DICT = {}  # the price of different metal
 
 
 class Symbols(object):
@@ -69,30 +69,65 @@ def error():
 
 
 def interpret(s):
-    question_primitive = 'how much is'
-    question_unit = 'how many'
-    # a.split('how much is')[-1].split()
-    # ['pish', 'tegj', 'glob', 'glob', '?']
+    '''
+    :param s: input sentence
+    :return: if question then answer with print , else insert into dict
+    '''
+    question_counts = 'how much is'
+    question_amount = 'how many Credits is'
+
     try:
-        pass
-        if s.startswith(question_primitive):
-            alien_list = s.split(question_primitive)[-1].split()
-            roman = roman_from_alien_list(alien_list)
-        elif s.startswith(question_unit):
-            pass
+        print 1
+        if s.startswith(question_counts):
+            # eg: how much is pish tegj glob glob ?
+            word_para = s.split(question_counts)[-1]
+            word_list = word_para.split()[:-1]  # ignore the '?'
+            symbols = ''
+            for word in word_list:
+                symbols += WORD_SYMBOL_DICT.get(word)
+            counts = Symbols(symbols).get_values()
+            print u"{0} is {1}".format(word_para, counts)
+            # return u"{0} is {1}".format(word_para,counts)
+
+        elif s.startswith(question_amount):
+            # eg: how many Credits is glob prok Gold ?
+            word_para = s.split(question_amount)[-1]
+            word_list = word_para.split()[:-1]  # [-2]:metal name ;[-1]:? -> ignore
+            symbols = ''
+            for word in word_list[:-1]:  # now word_list[-1] is metal name
+                symbols += WORD_SYMBOL_DICT.get(word)
+            counts = Symbols(symbols).get_values()
+            price = METAL_PRICE_DICT.get(word_list[-1])
+            amount = int(counts * price)  # output type: int
+            print u"{0} is {1} Credits ".format(word_list, amount)
+            # return u"{0} is {1} Credits ".format(word_list,amount)
+
         elif len(s.split('is')) == 2:
+            # if assertive sentence , then add info into dict
             info = s.split('is')
             unit = info[1].split()
-            if unit == 1:
-                word_roman_dict[info[0]] = info[1]
-            elif unit == 2:
-                # add to currency_dict
-                pass
+            if len(unit) == 1 and unit in SYMBOL_VALUES.iterkeys():
+                # eg : prok is V , add to WORD_SYMBOL_DICT
+                WORD_SYMBOL_DICT[info[0]] = unit
+                # return WORD_SYMBOL_DICT
+
+            elif len(unit) == 2:
+                # eg : glob glob Silver is 34 Credits add to METAL_PRICE_DICT
+                word_para = info[0].split()
+                metal = word_para[-1]
+                amount = int(unit[0])
+                symbols = ''
+                for word in word_para[:-1]:
+                    symbols += WORD_SYMBOL_DICT.get(word)
+                counts = Symbols(symbols).get_values()
+                price = float(amount / counts)  # the price of metal
+                METAL_PRICE_DICT[metal] = price
+                # return METAL_PRICE_DICT
+
             else:
                 error()
         else:
             error()
-            pass
     except Exception, e:
         error()
 
@@ -120,15 +155,12 @@ how many Credits is glob prok Iron ?
 how much wood could a woodchuck chuck if a woodchuck could chuck wood ?'''
     sentences = inputs.splitlines()
     for sentence in sentences:
-        if check_sentence_symbol(sentence):
-            print check_sentence_symbol(sentence)
-            # print "*"*10
+        interpret(sentence)
 
 
 def test_input(*args):
     sentence = raw_input("test input")
-    if check_sentence_symbol(sentence):
-        print check_sentence_symbol(sentence)
+    interpret(sentence)
 
 
 if __name__ == '__main__':
