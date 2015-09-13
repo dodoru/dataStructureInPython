@@ -76,59 +76,56 @@ def interpret(s):
     question_counts = 'how much is'
     question_amount = 'how many Credits is'
 
-    try:
-        print 1
-        if s.startswith(question_counts):
-            # eg: how much is pish tegj glob glob ?
-            word_para = s.split(question_counts)[-1]
-            word_list = word_para.split()[:-1]  # ignore the '?'
+    if s.startswith(question_counts) and s.endswith('?'):
+        # eg: how much is pish tegj glob glob ?
+        word_para = s.split(question_counts)[-1]
+        word_list = word_para.split()[:-1]  # ignore the '?'
+        symbols = ''
+        for word in word_list:
+            symbols += WORD_SYMBOL_DICT.get(word)
+        counts = Symbols(symbols).get_values()
+        print u"{0} is {1}".format(word_para[:-2], counts)
+
+    elif s.startswith(question_amount) and s.endswith('?'):
+        # eg: how many Credits is glob prok Gold ?
+        word_para = s.split(question_amount)[-1]
+        word_list = word_para.split()[:-1]  # [-2]:metal name ;[-1]:? -> ignore
+        symbols = ''
+        for word in word_list[:-1]:  # now word_list[-1] is metal name
+            symbols += WORD_SYMBOL_DICT.get(word)
+        counts = Symbols(symbols).get_values()
+        price = METAL_PRICE_DICT.get(word_list[-1])
+        amount = int(counts * price)  # output type: int
+        print u"{0} is {1} Credits ".format(word_para[:-2], amount)
+
+    elif not s.endswith('?'):
+        # pish 'is' so ,can't judge by s.split('is')
+        # if assertive sentence , then add info into dict
+        info = s.split()
+        isn = -1  # index of 'is' but not in 'pish'
+        try:
+            isn = info.index('is')
+        except:
+            pass
+
+        if len(info) == 3 and isn == 1:
+            # eg : pish is X , add to WORD_SYMBOL_DICT
+            WORD_SYMBOL_DICT[info[0]] = info[2]
+
+        elif len(info) > 3 and isn > 1:
+            # eg : glob glob Silver is 34 Credits , add to METAL_PRICE_DICT
+            metal = info[isn - 1]
+            amount = float(info[isn + 1])
             symbols = ''
-            for word in word_list:
+            for word in info[:isn - 1]:
                 symbols += WORD_SYMBOL_DICT.get(word)
             counts = Symbols(symbols).get_values()
-            print u"{0} is {1}".format(word_para, counts)
-            # return u"{0} is {1}".format(word_para,counts)
+            price = amount / counts  # the price of metal should be float
+            METAL_PRICE_DICT[metal] = price
 
-        elif s.startswith(question_amount):
-            # eg: how many Credits is glob prok Gold ?
-            word_para = s.split(question_amount)[-1]
-            word_list = word_para.split()[:-1]  # [-2]:metal name ;[-1]:? -> ignore
-            symbols = ''
-            for word in word_list[:-1]:  # now word_list[-1] is metal name
-                symbols += WORD_SYMBOL_DICT.get(word)
-            counts = Symbols(symbols).get_values()
-            price = METAL_PRICE_DICT.get(word_list[-1])
-            amount = int(counts * price)  # output type: int
-            print u"{0} is {1} Credits ".format(word_list, amount)
-            # return u"{0} is {1} Credits ".format(word_list,amount)
-
-        elif len(s.split('is')) == 2:
-            # if assertive sentence , then add info into dict
-            info = s.split('is')
-            unit = info[1].split()
-            if len(unit) == 1 and unit in SYMBOL_VALUES.iterkeys():
-                # eg : prok is V , add to WORD_SYMBOL_DICT
-                WORD_SYMBOL_DICT[info[0]] = unit
-                # return WORD_SYMBOL_DICT
-
-            elif len(unit) == 2:
-                # eg : glob glob Silver is 34 Credits add to METAL_PRICE_DICT
-                word_para = info[0].split()
-                metal = word_para[-1]
-                amount = int(unit[0])
-                symbols = ''
-                for word in word_para[:-1]:
-                    symbols += WORD_SYMBOL_DICT.get(word)
-                counts = Symbols(symbols).get_values()
-                price = float(amount / counts)  # the price of metal
-                METAL_PRICE_DICT[metal] = price
-                # return METAL_PRICE_DICT
-
-            else:
-                error()
         else:
             error()
-    except Exception, e:
+    else:
         error()
 
 
@@ -156,6 +153,7 @@ how much wood could a woodchuck chuck if a woodchuck could chuck wood ?'''
     sentences = inputs.splitlines()
     for sentence in sentences:
         interpret(sentence)
+        print "  " * 20
 
 
 def test_input(*args):
