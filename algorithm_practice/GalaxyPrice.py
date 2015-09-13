@@ -3,8 +3,8 @@
 # import re   # match the farmat symbols with RegEx
 
 SYMBOL_VALUES = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
-SYMBOL_DICT = {'glob': 'I', 'prok': 'V', 'pish': 'X', 'tegj': 'L'}
-# SYMBOL_DICT = {}
+# SYMBOL_DICT = {'glob': 'I', 'prok': 'V', 'pish': 'X', 'tegj': 'L'}
+SYMBOL_DICT = {}
 METAL_DICT = {}
 
 
@@ -78,9 +78,10 @@ def check_sentence_symbol(sentence):
             symbols += SYMBOL_DICT.get(s)
             j += 1
 
-    if (j == k) and (len(seqs) == 3):
+    if len(seqs) == 3:
         # insert into SYMBOL_DICT , eg : glob is I
-        SYMBOL_DICT[seqs[0]] = seqs[2]
+        SYMBOL_DICT[str(seqs[0])] = seqs[2]
+        # return SYMBOL_DICT
 
     elif seqs[-1] != '?' and len(seqs) > 3:
         # if assertive sentence then get price and metal name ,eg : glob glob Silver is 34 Credits
@@ -88,7 +89,8 @@ def check_sentence_symbol(sentence):
         if count.is_format():
             metal = seqs[j]
             price = int(seqs[k + 1]) / float(count.get_values())
-            METAL_DICT[metal] = price
+            METAL_DICT[str(metal)] = price
+            # return METAL_DICT
 
     elif seqs[-1] == '?':
         # this is a question, so get the price of the metals.
